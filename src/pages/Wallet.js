@@ -1,9 +1,11 @@
 import React from 'react';
+import Header from '../components/Header';
+import SpendForms from '../components/SpendForms';
 
-class Wallet extends React.Component {
-  render() {
-    return <div>TrybeWallet</div>;
-  }
+export default function Wallet() {
+  return (
+    <div>
+      <Header />
+      <SpendForms />
+    </div>);
 }
-
-export default Wallet;
