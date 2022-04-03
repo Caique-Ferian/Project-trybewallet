@@ -4,11 +4,17 @@ import PropTypes from 'prop-types';
 
 function Header(props) {
   const { email, totalSpendValue } = props;
+  const ZERO = 0;
   return (
     <div>
       <h4 data-testid="email-field">{email}</h4>
       <span>Despesa total: </span>
-      <span data-testid="total-field">{totalSpendValue.toFixed(2)}</span>
+      <span
+        data-testid="total-field"
+      >
+        {totalSpendValue ? totalSpendValue?.toFixed(2) : ZERO}
+
+      </span>
       <span data-testid="header-currency-field">BRL</span>
     </div>
   );
