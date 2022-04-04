@@ -13,5 +13,4 @@ export const getApiResultAction = (json) => (
 
 export const addSpendAction = (spend) => ({ type: 'spend/addSpend', payload: spend });
 
-export const totalValueAction = (value) => (
-  { type: 'totalValue/changeTotal', payload: value });
+export const removeSpendAction = (id) => ({ type: 'spend/removeSpend', payload: id });

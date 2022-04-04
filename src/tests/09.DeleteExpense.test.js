@@ -61,7 +61,6 @@ describe('9 - Crie um botão para deletar uma despesa da tabela contendo as segu
     
     const totalField = screen.getByTestId(TOTAL_FIELD_TEST_ID);
     expect(totalField).toContainHTML('187.12');
-    
     const deleteBtn = screen.getAllByTestId(BTN_DELETE_TEST_ID)[0];
     
     fireEvent.click(deleteBtn);

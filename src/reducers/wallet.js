@@ -6,7 +6,6 @@ const initialState = {
   error: '',
   apiResult: {},
   expenses: [],
-  totalSpendValue: 0,
 };
 
 export function fetchCurrencyExchange(type) {
@@ -40,12 +39,15 @@ export default function walletReducer(state = initialState, action) {
       ...state, error: payload,
     };
   case 'spend/addSpend':
+
     return {
-      ...state, expenses: [...state.expenses, payload],
+      ...state,
+      expenses: [...state.expenses, payload],
     };
-  case 'totalValue/changeTotal':
+  case 'spend/removeSpend':
     return {
-      ...state, totalSpendValue: payload,
+      ...state,
+      expenses: state.expenses.filter((expense) => expense.id !== payload),
     };
   default:
     return state;

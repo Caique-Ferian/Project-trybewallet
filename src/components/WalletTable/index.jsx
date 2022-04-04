@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { removeSpendAction } from '../../actions';
 
 class WalletTable extends Component {
+  handleClick = (id) => {
+    const { dispatchRemoveSpend } = this.props;
+    dispatchRemoveSpend(id);
+  }
+
   render() {
     const { expenses } = this.props;
     return (
@@ -34,11 +40,22 @@ class WalletTable extends Component {
                   {parseFloat(spend.exchangeRates[spend.currency].ask)
                     .toFixed(2)}
                 </td>
-                <td>{(spend.value * spend.exchangeRates[spend.currency].ask)}</td>
+                <td>
+                  {
+                    (spend.value * spend.exchangeRates[spend.currency].ask).toFixed(2)
+                  }
+                </td>
                 <td>Real</td>
                 <td>
                   <button type="button">Editar</button>
-                  <button type="button">Excluir</button>
+                  <button
+                    data-testid="delete-btn"
+                    onClick={ () => this.handleClick(spend.id) }
+                    type="button"
+                  >
+                    Excluir
+
+                  </button>
                 </td>
               </tr>))}
           </tbody>
@@ -50,7 +67,11 @@ class WalletTable extends Component {
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
 });
+const mapDispatchToProps = (dispatch) => ({
+  dispatchRemoveSpend: (spend) => dispatch(removeSpendAction(spend)),
+});
 WalletTable.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object),
+  dispatchRemoveSpend: PropTypes.func,
 }.isRequired;
-export default connect(mapStateToProps)(WalletTable);
+export default connect(mapStateToProps, mapDispatchToProps)(WalletTable);

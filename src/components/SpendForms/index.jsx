@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchCurrencyExchange } from '../../reducers/wallet';
-import { totalValueAction, addSpendAction } from '../../actions';
+import { addSpendAction } from '../../actions';
 
 class SpendForms extends React.Component {
   constructor(props) {
@@ -26,15 +26,6 @@ class SpendForms extends React.Component {
     this.setState({ [name]: value });
   }
 
-  totalValueAcc = () => {
-    const { spendValue, currency } = this.state;
-    const { totalSpendValue, dispatchTotalValue, exchangeRates } = this.props;
-    const value1 = parseInt(spendValue, 10);
-    const result = (value1 * exchangeRates[currency].ask) + totalSpendValue;
-    dispatchTotalValue(result);
-    this.setState({ spendValue: '' });
-  }
-
   handleClick = async () => {
     const { spendValue, currency, payment, tag, description } = this.state;
     const { dispatchFetchCurrencyExchange } = this.props;
@@ -50,7 +41,7 @@ class SpendForms extends React.Component {
       exchangeRates,
     };
     dispatchSpend(object);
-    this.totalValueAcc();
+    this.setState({ spendValue: '' });
   }
 
   render() {
@@ -150,20 +141,16 @@ const mapStateToProps = (state) => ({
   currencyExchange: state.wallet.currencies,
   exchangeRates: state.wallet.apiResult,
   expenses: state.wallet.expenses,
-  totalSpendValue: state.wallet.totalSpendValue,
 });
 const mapDispatchToProps = (dispatch) => ({
   dispatchFetchCurrencyExchange: (type = 'all') => dispatch(fetchCurrencyExchange(type)),
   dispatchSpend: (spend) => dispatch(addSpendAction(spend)),
-  dispatchTotalValue: (value) => dispatch(totalValueAction(value)),
 });
 SpendForms.propTypes = {
   dispatchFetchCurrencyExchange: PropTypes.func,
   currencyExchange: PropTypes.arrayOf(PropTypes.string),
   exchangeRates: PropTypes.object,
   dispatchSpend: PropTypes.func,
-  dispatchTotalValue: PropTypes.func,
-  totalSpendValue: PropTypes.number,
 }.isRequired;
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpendForms);
