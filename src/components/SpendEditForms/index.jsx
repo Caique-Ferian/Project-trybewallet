@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchCurrencyExchange } from '../../reducers/wallet';
-import { addSpendAction } from '../../actions';
+import { editSpendAction } from '../../actions';
 
-class SpendForms extends React.Component {
+class SpendEditForms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,8 +17,14 @@ class SpendForms extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatchFetchCurrencyExchange } = this.props;
-    dispatchFetchCurrencyExchange('key');
+    const { spendToEdit } = this.props;
+    this.setState({
+      spendValue: spendToEdit.value,
+      currency: spendToEdit.currency,
+      payment: spendToEdit.method,
+      tag: spendToEdit.tag,
+      description: spendToEdit.description,
+    });
   }
 
   handleChange = ({ target }) => {
@@ -27,28 +32,18 @@ class SpendForms extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleClick = async () => {
+  handleClick = () => {
     const { spendValue, currency, payment, tag, description } = this.state;
-    const { dispatchFetchCurrencyExchange } = this.props;
-    await dispatchFetchCurrencyExchange();
-    const { exchangeRates, dispatchSpend, expenses } = this.props;
+    const { dispatchEditedSpend, spendToEdit } = this.props;
     const object = {
-      id: expenses.length,
+      id: spendToEdit.id,
       value: spendValue,
       description,
       currency,
       method: payment,
       tag,
-      exchangeRates,
     };
-    dispatchSpend(object);
-    this.setState((prevState) => ({
-      spendValue: '',
-      currency: 'USD',
-      payment: 'Dinheiro',
-      tag: prevState.tagTypes[0],
-      description: '',
-    }));
+    dispatchEditedSpend(object);
   }
 
   render() {
@@ -71,6 +66,7 @@ class SpendForms extends React.Component {
         <label htmlFor="currency-type">
           Moeda:
           <select
+            data-testid="currency-input"
             id="currency-type"
             name="currency"
             value={ currency }
@@ -137,7 +133,7 @@ class SpendForms extends React.Component {
           type="submit"
           onClick={ this.handleClick }
         >
-          Adicionar despesa
+          Editar despesa
         </button>
       </form>
     );
@@ -145,20 +141,17 @@ class SpendForms extends React.Component {
 }
 const mapStateToProps = (state) => ({
   currencyExchange: state.wallet.currencies,
-  exchangeRates: state.wallet.apiResult,
   expenses: state.wallet.expenses,
   spendToEdit: state.wallet.spendToEdit,
 });
 const mapDispatchToProps = (dispatch) => ({
-  dispatchFetchCurrencyExchange: (type = 'all') => dispatch(fetchCurrencyExchange(type)),
-  dispatchSpend: (spend) => dispatch(addSpendAction(spend)),
+  dispatchEditedSpend: (spend) => dispatch(editSpendAction(spend)),
 });
-SpendForms.propTypes = {
+SpendEditForms.propTypes = {
   dispatchFetchCurrencyExchange: PropTypes.func,
   currencyExchange: PropTypes.arrayOf(PropTypes.string),
-  exchangeRates: PropTypes.object,
-  dispatchSpend: PropTypes.func,
+  dispatchEditedSpend: PropTypes.func,
   spendToEdit: PropTypes.object,
 }.isRequired;
 
-export default connect(mapStateToProps, mapDispatchToProps)(SpendForms);
+export default connect(mapStateToProps, mapDispatchToProps)(SpendEditForms);

@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { removeSpendAction } from '../../actions';
+import { addSpendToEditAction, removeSpendAction } from '../../actions';
 
 class WalletTable extends Component {
-  handleClick = (id) => {
+  handleClickRemove = (id) => {
     const { dispatchRemoveSpend } = this.props;
     dispatchRemoveSpend(id);
+  }
+
+  handleClickEdit = (id) => {
+    const { dispatchSpendToEdit } = this.props;
+    dispatchSpendToEdit(id);
   }
 
   render() {
@@ -47,10 +52,17 @@ class WalletTable extends Component {
                 </td>
                 <td>Real</td>
                 <td>
-                  <button type="button">Editar</button>
+                  <button
+                    data-testid="edit-btn"
+                    onClick={ () => this.handleClickEdit(spend.id) }
+                    type="button"
+                  >
+                    Editar
+
+                  </button>
                   <button
                     data-testid="delete-btn"
-                    onClick={ () => this.handleClick(spend.id) }
+                    onClick={ () => this.handleClickRemove(spend.id) }
                     type="button"
                   >
                     Excluir
@@ -68,10 +80,12 @@ const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
 });
 const mapDispatchToProps = (dispatch) => ({
-  dispatchRemoveSpend: (spend) => dispatch(removeSpendAction(spend)),
+  dispatchRemoveSpend: (spendId) => dispatch(removeSpendAction(spendId)),
+  dispatchSpendToEdit: (spendId) => dispatch(addSpendToEditAction(spendId)),
 });
 WalletTable.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object),
   dispatchRemoveSpend: PropTypes.func,
+  dispatchSpendToEdit: PropTypes.func,
 }.isRequired;
 export default connect(mapStateToProps, mapDispatchToProps)(WalletTable);

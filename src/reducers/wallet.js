@@ -6,6 +6,7 @@ const initialState = {
   error: '',
   apiResult: {},
   expenses: [],
+  spendToEdit: {},
 };
 
 export function fetchCurrencyExchange(type) {
@@ -41,14 +42,32 @@ export default function walletReducer(state = initialState, action) {
   case 'spend/addSpend':
 
     return {
-      ...state,
-      expenses: [...state.expenses, payload],
+      ...state, expenses: [...state.expenses, payload],
     };
   case 'spend/removeSpend':
     return {
       ...state,
       expenses: state.expenses.filter((expense) => expense.id !== payload),
     };
+  case 'spend/addSpendToEdit':
+    return {
+      ...state, spendToEdit: state.expenses.find((spend) => spend.id === payload),
+    };
+  case 'spend/editSpend': {
+    const { id, value, description, currency, method, tag } = payload;
+    return {
+      ...state,
+      expenses: state.expenses.map((element) => {
+        if (element.id !== id) {
+          return element;
+        }
+        return {
+          ...element, value, description, currency, method, tag,
+        };
+      }),
+      spendToEdit: {},
+    };
+  }
   default:
     return state;
   }
