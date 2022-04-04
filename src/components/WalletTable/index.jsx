@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addSpendToEditAction, removeSpendAction } from '../../actions';
+import './style.css';
 
 class WalletTable extends Component {
   handleClickRemove = (id) => {
@@ -17,11 +18,10 @@ class WalletTable extends Component {
   render() {
     const { expenses } = this.props;
     return (
-      <div>
-        <table>
-          <thead>
+      <div className="table-container">
+        <table width="100%">
+          <thead className="test">
             <tr>
-
               <th>Descrição</th>
               <th>Tag</th>
               <th>Método de pagamento</th>
@@ -36,37 +36,43 @@ class WalletTable extends Component {
           <tbody>
             {expenses?.map((spend) => (
               <tr key={ spend.id }>
-                <td>{spend.description}</td>
-                <td>{spend.tag}</td>
-                <td>{spend.method}</td>
-                <td>{parseFloat(spend.value).toFixed(2)}</td>
-                <td>{spend.exchangeRates[spend.currency].name}</td>
-                <td>
-                  {parseFloat(spend.exchangeRates[spend.currency].ask)
-                    .toFixed(2)}
+                <td colSpan="1"><small>{spend.description}</small></td>
+                <td colSpan="1"><small>{spend.tag}</small></td>
+                <td colSpan="1"><small>{spend.method}</small></td>
+                <td colSpan="1"><small>{parseFloat(spend.value).toFixed(2)}</small></td>
+                <td colSpan="1">
+                  <small>
+                    {spend.exchangeRates[spend.currency].name.split('/')[0]}
+                  </small>
                 </td>
-                <td>
+                <td colSpan="1">
+                  <small>
+                    {parseFloat(spend.exchangeRates[spend.currency].ask)
+                      .toFixed(2)}
+                  </small>
+                </td>
+                <td colSpan="1">
                   {
                     (spend.value * spend.exchangeRates[spend.currency].ask).toFixed(2)
                   }
                 </td>
-                <td>Real</td>
-                <td>
+                <td colSpan="1"><small>Real</small></td>
+                <td colSpan="1">
                   <button
                     data-testid="edit-btn"
+                    className="button-edit"
                     onClick={ () => this.handleClickEdit(spend.id) }
                     type="button"
                   >
                     Editar
-
                   </button>
                   <button
                     data-testid="delete-btn"
+                    className="button-delete"
                     onClick={ () => this.handleClickRemove(spend.id) }
                     type="button"
                   >
                     Excluir
-
                   </button>
                 </td>
               </tr>))}

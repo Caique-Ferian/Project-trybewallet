@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import LoginButton from '../components/LoginButton';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './login.css';
+import wallet from '../images/dv6y2019130322019-04-014630664Digital-Wallet-Logo.jpg';
 
 export default function Login() {
   const [email, setUserEmail] = useState('');
@@ -24,9 +27,14 @@ export default function Login() {
   };
   useEffect(validation);
   return (
-    <div>
+    <div className="login-container">
+      <div className="img-container">
+        <h4>Trybe Wallet</h4>
+        <img src={ wallet } alt="wallet-img" />
+      </div>
       <input
         data-testid="email-input"
+        className="form-control"
         name="email"
         onChange={ handleChange }
         placeholder="Email"
@@ -35,6 +43,7 @@ export default function Login() {
       />
       <input
         data-testid="password-input"
+        className="form-control input-class"
         name="password"
         onChange={ handleChange }
         placeholder="Senha"

@@ -56,90 +56,97 @@ class SpendForms extends React.Component {
     const paymentTypes = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
     const { spendValue, currency, payment, tag, description, tagTypes } = this.state;
     return (
-      <form onSubmit={ (e) => e.preventDefault() }>
-        <label htmlFor="spend-value">
-          Valor:
-          <input
-            id="spend-value"
-            name="spendValue"
-            onChange={ this.handleChange }
-            type="number"
-            data-testid="value-input"
-            value={ spendValue }
-          />
-        </label>
-        <label htmlFor="currency-type">
-          Moeda:
-          <select
-            id="currency-type"
-            name="currency"
-            value={ currency }
-            onChange={ this.handleChange }
+      <div className="div-container">
+        <form className="form-container" onSubmit={ (e) => e.preventDefault() }>
+          <label htmlFor="spend-value">
+            Valor
+            <input
+              id="spend-value"
+              className="form-control form-control-sm"
+              name="spendValue"
+              onChange={ this.handleChange }
+              type="number"
+              data-testid="value-input"
+              value={ spendValue }
+            />
+          </label>
+          <label htmlFor="currency-type">
+            Moeda
+            <select
+              className="form-select form-select-sm"
+              id="currency-type"
+              name="currency"
+              value={ currency }
+              onChange={ this.handleChange }
+            >
+              {currencyExchange?.map((element, index) => (
+                <option
+                  key={ index }
+                >
+                  {element}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label htmlFor="payment-type">
+            Método de pagamento
+            <select
+              className="form-select form-select-sm"
+              id="payment-type"
+              data-testid="method-input"
+              value={ payment }
+              name="payment"
+              onChange={ this.handleChange }
+            >
+              {paymentTypes.map((types, index) => (
+                <option
+                  key={ index }
+                >
+                  {types}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label htmlFor="tag-type">
+            Tag
+            <select
+              className="form-select form-select-sm"
+              id="tag-type"
+              data-testid="tag-input"
+              value={ tag }
+              name="tag"
+              onChange={ this.handleChange }
+            >
+              {tagTypes.map((tagType, index) => (
+                <option
+                  key={ index }
+                >
+                  {tagType}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label htmlFor="spend-description">
+            Descrição
+            <input
+              id="spend-description"
+              className="form-control form-control-sm"
+              type="text"
+              data-testid="description-input"
+              name="description"
+              onChange={ this.handleChange }
+              value={ description }
+            />
+          </label>
+          <button
+            type="submit"
+            className="button-spend"
+            onClick={ this.handleClick }
           >
-            {currencyExchange?.map((element, index) => (
-              <option
-                key={ index }
-              >
-                {element}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label htmlFor="payment-type">
-          Método de pagamento:
-          <select
-            id="payment-type"
-            data-testid="method-input"
-            value={ payment }
-            name="payment"
-            onChange={ this.handleChange }
-
-          >
-            {paymentTypes.map((types, index) => (
-              <option
-                key={ index }
-              >
-                {types}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label htmlFor="tag-type">
-          Tag:
-          <select
-            id="tag-type"
-            data-testid="tag-input"
-            value={ tag }
-            name="tag"
-            onChange={ this.handleChange }
-          >
-            {tagTypes.map((tagType, index) => (
-              <option
-                key={ index }
-              >
-                {tagType}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label htmlFor="spend-description">
-          Descrição:
-          <input
-            id="spend-description"
-            type="text"
-            data-testid="description-input"
-            name="description"
-            onChange={ this.handleChange }
-            value={ description }
-          />
-        </label>
-        <button
-          type="submit"
-          onClick={ this.handleClick }
-        >
-          Adicionar despesa
-        </button>
-      </form>
+            Adicionar despesa
+          </button>
+        </form>
+      </div>
     );
   }
 }
